@@ -1,0 +1,11 @@
+1.Find 2nd largest value in an array that has duplicates of the largest integer
+{ 2, 5, 15, 6, 8, 9, 12, 20, 20, 18, 21 }
+2. Remove duplicates from LinkedList without using any other data types means Set/etc no java 8.
+3.Reverse a String without effecting the special characters position.
+Example: "HELLO@WORL&D", then the out put must be 
+ Output: "DLRWO@LLE&H"
+ 4.Remove duplicates from an unsorted linked list
+ 5.Remove duplicates from a sorted linked list
+6.Sort an array without using any in-built functions
+7.Write a program to calculate diagnal sum of n*N matrix
+8. Sort HashMap using values using java 8

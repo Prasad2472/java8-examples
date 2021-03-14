@@ -1,0 +1,224 @@
+Qualcomm" 19/01/2021
+=======================
+1. If @ManyToOne relation ship has at department to employee record
+-What is default fetch type for @ManyToOne relation? will it pull the records of employee and vice versa?
+Employee has OneTomany relationship
+if i fetch all the employees,will it fecth department?, how many queris will fire here?
+-if you use Spring Data, then if you get the Department by using ID, will it fetch Employee record?
+
+2.What are the new featues of Spring boot 2.41 over 1.5
+3. what are new features of Java 11?
+4.Did you worked on java 8 streams?
+5.What are the design patterns which you have used in ur project? just names.. not asking how u?
+6.How did u increase learning curve?
+7.Tell about your project? and your role?
+8.What did you do apart from coding/working?
+9. I have a list of integers, write code to aggregate list with multiple of 2,3, and 5. means all the multpliers of 2 in one list, and multpliers of 3 in one list etc..
+
+ReactJs:
+Problem:
+Local package.json exists, but node_modules missing
+Solution:
+First run "pm install"  and then "npm start"
+
+Problem:
+Error: Target container is not a DOM element.
+
+before fix in index.js:
+ReactDOM.render(
+  <React.StrictMode>
+    <App />,
+  </React.StrictMode>,
+  <LoginForm />,
+  document.getElementById('root')
+);
+After fix:
+ReactDOM.render(
+  <React.StrictMode>
+    <LoginForm />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+
+
+Problem: Caused by: java.lang.IllegalArgumentException: Not a managed type: class com.springboot.hibernate.entity.Building
+Existing code:
+@Repository
+public interface BuildingRepository extends JpaRepository<Building, Integer>{}
+Solution:
+
+Problem description:
+Field repository in com.springboot.hibernate.service.BuildingServiceImpl required a bean of type 'com.springboot.hibernate.repository.BuildingRepository' that could not be found.
+
+Solution:
+When the repository package is different to @SpringBootApplication/@EnableAutoConfiguration, base package of @EnableJpaRepositories is required to be defined explicitly.
+Try to add @EnableJpaRepositories("com.pharmacy.persistence.users.dao") to SpringBootRunner
+
+--Transaction management in Spring Boot and Spring data jpa:
+@Repository
+@Transactional(readOnly = true)
+public class SimpleJpaRepository<T, ID> implements JpaRepositoryImplementation<T, ID> 
+
+what is the purpose of @Transactional(read-only = true)?/Spring @Transactional read-only propagation:
+https://stackoverflow.com/questions/1614139/spring-transactional-read-only-propagation
+Question:
+I'm experimenting with using the command pattern to allow my web layer to work with Hibernate entities within the context of a single transaction (thus avoiding lazy loading exceptions). I am, however, confused now with how I should deal with transactions.
+
+My commands call service layer methods that are annotated with @Transactional annotations. Some of these service layer methods are read-only - e.g. @Transactional(readOnly=true) - and some are read/write.
+
+My service layer exposes a command handler that executes commands passed to it on behalf of the web layer.
+
+@Transactional
+public Command handle( Command cmd ) throws CommandException
+I assume I am right in making the command handler's handle() method transactional. This is where the confusion comes in. If the implementation of a command makes calls to multiple service layer methods, there is no way for the command handler to know whether operations called within the command will be read-only, read/write or a combination of the two.
+
+I don't understand how propagation works in this example. If I were to make the handle() method readOnly=true, then what happens if the command then calls a service layer method that is annotated with @Transactional(realOnly=false)?
+
+I'd appreciate a better understanding of this and welcome your comments...
+Answer:
+
+First of all, since Spring doesn't do persistence itself, it cannot specify what readOnly should exactly mean. This attribute is only a hint to the provider, the behavior depends on, in this case, Hibernate.
+
+If you specify readOnly as true, the flush mode will be set as FlushMode.NEVER in the current Hibernate Session preventing the session from committing the transaction.
+
+Furthermore, setReadOnly(true) will be called on the JDBC Connection, which is also a hint to the underlying database. If your database supports it (most likely it does), this has basically the same effect as FlushMode.NEVER, but it's stronger since you cannot even flush manually.
+
+Now let's see how transaction propagation works.
+
+If you don't explicitly set readOnly to true, you will have read/write transactions. Depending on the transaction attributes (like REQUIRES_NEW), sometimes your transaction is suspended at some point, a new one is started and eventually committed, and after that the first transaction is resumed.
+
+OK, we're almost there. Let's see what brings readOnly into this scenario.
+
+If a method in a read/write transaction calls a method that requires a readOnly transaction, the first one should be suspended, because otherwise a flush/commit would happen at the end of the second method.
+
+
+
+
+
+Hibernate/JPA:
+OneToMany:
+https://docs.jboss.org/hibernate/jpa/2.1/api/javax/persistence/OneToMany.html
+
+Defines a many-valued association with one-to-many multiplicity.
+If the collection is defined using generics to specify the element type, the associated target entity type need not be specified; otherwise the target entity class must be specified. If the relationship is bidirectional, the mappedBy element must be used to specify the relationship field or property of the entity that is the owner of the relationship.
+
+The OneToMany annotation may be used within an embeddable class contained within an entity class to specify a relationship to a collection of entities. If the relationship is bidirectional, the mappedBy element must be used to specify the relationship field or property of the entity that is the owner of the relationship. When the collection is a java.util.Map, the cascade element and the orphanRemoval element apply to the map value.
+
+
+Example 1: One-to-Many association using generics
+
+    // In Customer class:
+
+    @OneToMany(cascade=ALL, mappedBy="customer")
+    public Set<Order> getOrders() { return orders; }
+
+    In Order class:
+
+    @ManyToOne
+    @JoinColumn(name="CUST_ID", nullable=false)
+    public Customer getCustomer() { return customer; }
+
+
+    Example 2: One-to-Many association without using generics
+
+    // In Customer class:
+
+    @OneToMany(targetEntity=com.acme.Order.class, cascade=ALL,
+                mappedBy="customer")
+    public Set getOrders() { return orders; }
+
+    // In Order class:
+
+    @ManyToOne
+    @JoinColumn(name="CUST_ID", nullable=false)
+    public Customer getCustomer() { return customer; }
+
+
+    Example 3: Unidirectional One-to-Many association using a foreign key mapping
+
+    // In Customer class:
+
+    @OneToMany(orphanRemoval=true)
+    @JoinColumn(name="CUST_ID") // join column is in table for Order
+    public Set<Order> getOrders() {return orders;}
+
+
+
+
+Order:
+To order lists in memory, add @javax.persistence.OrderBy to your property. This annotation takes as parameter a list of comma separated properties (of the target entity) and orders the collection accordingly (eg firstname asc, age desc), if the string is empty, the collection will be ordered by the primary key of the target entity.
+ @OneToMany(mappedBy="customer")
+   @OrderBy("number")
+   public List<Order> getOrders() { return orders; }
+
+Maps:
+The question with Maps is where the key value is stored. There are everal options. Maps can borrow their keys from one of the associated entity properties or have dedicated columns to store an explicit key.
+
+To use one of the target entity property as a key of the map, use @MapKey(name="myProperty"), where myProperty is a property name in the target entity. When using @MapKey without the name attribuate, the target entity primary key is used. The map key uses the same column as the property pointed out. There is no additional column defined to hold the map key, because the map key represent a target property. Be aware that once loaded, the key is no longer kept in sync with the property. In other words, if you change the property value, the key will not change automatically in your Java model.
+
+
+
+OneToMany: Eager Fetch hibernate query using findById():
+Hibernate: 
+    select
+        building0_.id as id1_0_0_,
+        building0_.name as name2_0_0_,
+        building0_.location as location3_0_0_,
+        floors1_.id as id4_1_1_,
+        floors1_.floor_id as floor_id1_1_1_,
+        floors1_.floor_id as floor_id1_1_2_,
+        floors1_.id as id4_1_2_,
+        floors1_.floor_name as floor_na2_1_2_,
+        floors1_.floor_no as floor_no3_1_2_ 
+    from
+        building building0_ 
+    left outer join
+        floor floors1_ 
+            on building0_.id=floors1_.id 
+    where
+        building0_.id=?
+		
+OneToMany: lazy Loading 
+
+Hibernate: 
+    select
+        floors0_.id as id4_1_0_,
+        floors0_.floor_id as floor_id1_1_0_,
+        floors0_.floor_id as floor_id1_1_1_,
+        floors0_.id as id4_1_1_,
+        floors0_.floor_name as floor_na2_1_1_,
+        floors0_.floor_no as floor_no3_1_1_ 
+    from
+        floor floors0_ 
+    where
+        floors0_.id=?
+Hibernate: 
+    select
+        building0_.id as id1_0_0_,
+        building0_.name as name2_0_0_,
+        building0_.location as location3_0_0_ 
+    from
+        building building0_ 
+    where
+        building0_.id=?	
+		
+		
+ManyToOne: findById()
+
+Hibernate: 
+    select
+        floor0_.floor_id as floor_id1_1_0_,
+        floor0_.id as id4_1_0_,
+        floor0_.floor_name as floor_na2_1_0_,
+        floor0_.floor_no as floor_no3_1_0_,
+        building1_.id as id1_0_1_,
+        building1_.name as name2_0_1_,
+        building1_.location as location3_0_1_ 
+    from
+        floor floor0_ 
+    left outer join
+        building building1_ 
+            on floor0_.id=building1_.id 
+    where
+        floor0_.floor_id=?
