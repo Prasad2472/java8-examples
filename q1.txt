@@ -1,0 +1,36 @@
+walmartlabs:
+find largest substring
+reverse the linked list
+get the  the node value
+
+AstraZenica:
+write the rest full service api to  design front end and backend your own design for 1 crore bookes.
+how u deploying your applications.
+spring boot annotation whatever u used  reason.
+Angular routs,components, lifecycle hooks use where u exactly used.
+what this the difficult issue you faced this project how approched resolved or not 
+
+UST global:
+write microservice app sudo code assume u r designing some e-commerce app it likes flipkart, netfleix.
+dont ask any question u r the architect u have to design take 3 minutes and design whatever app u think it should be microservice.
+
+write code to check odd or even number using java 8
+
+write java 8 code to print no of repeated words occurance.
+
+ford motors:
+overrideing,
+overloading,
+default metods
+comparator in java 
+can we override default methods how? why?
+lamda expression write code your logics recently implemented in projects.
+completale future use and implementation
+hash map internal flow and collision strategy
+
+behavioral:
+u r late in metting how u convey to  u r manager.
+u had conflict with manager/colleague wat you reaction.
+u r oneof colleague always coming to meeting late how u approach.
+critical project delivery already mis understanding with project manager and client.they scold badly due to project status. manger committed to deliver poject this week, last minute one of your colleague find one issue its minor but it casue some problem in feature
+project manager said leave it without inormin to client we can deliver. what is your openion, how u handle this situstion, can u inorm to client regarding this issue
