@@ -1,0 +1,315 @@
+Tell me Oops concept with an example? how you have used in your last/current project?
+When will you chose inteface? and abstract class?
+How do you handle exceptions in your project?
+Why finally block always executed?
+What is the reflection? What is the use of it?
+What is the difference between Comparable and Comparator? 
+
+Why Functional Interfaces in Java 8 have one Abstract Method?
+What's the difference between map() and flatMap() methods in Java 8
+How does the reduce() method work in Java 8?
+
+What is the default size of list? what happen if we try to insert more elements?
+Why to override equals and hashcode() methods?
+What is hash-collision in Hashtable and how it is handled?
+How Hash map Works internally? 
+What is the data structure of the Map?
+If two different object has same hashcode, how map will store the data?
+Have you worked on Queues?, what is ArrayBlocking Queue?
+
+ 
+
+What is volatile?
+When you will get ConcurrentModificationException? how do you resolve it?
+Why ConcurrentHasMap thread safe?
+Java.util.concurrent.Lock vs Synchronization?which one you will prefer
+What is deadlock? how will you resolve?
+How do you identify the stuck thread?
+
+Spring:
+Can you use @Autowired with static fields?
+How to inject a value to static field?
+
+//XML configuration
+<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <property name="staticMethod" value="de.inweb.blog.BadDesign.setTheProperty"/>
+    <property name="arguments">
+        <list>
+            <ref bean="theProperty"/>
+        </list>
+   </property>
+</bean>
+
+//Using Annotation
+public void setTheProperty(Object value) {
+    foo.bar.Class.STATIC_VALUE = value;
+}
+
+Javascript:
+What is prototype? what is the advantage for ?
+
+Lazy Initialization?
+SpringApplication allows an application to be initialized lazily. When lazy initialization is enabled, beans are created as they are needed rather than during application startup.
+ As a result, enabling lazy initialization can reduce the time that it takes your application to start.
+ In a web application, enabling lazy initialization will result in many web-related beans not being initialized until an HTTP request is received.
+spring.main.lazy-initialization=true
+Why both spring-boot-starter-parent and spring-boot-starter-web are needed for Spring Boot application pom?
+If you check the the spring-boot-starter-parent pom file, you'll see that it provides default properties and maven plugin configuration, whereas spring-boot-starter-web provides web-related spring dependencies without any additional configuration. Furthermore, both starters inherit from spring-boot-dependencies, which defines a list of dependencies that spring supports. This allows you to omit the version for any of these dependencies in your build configuration. You can learn more by reading the official documentation.
+
+So to summarize, spring-boot-starter-parent provides
+
+default maven plugin setup
+default maven properties
+dependency management
+Whereas spring-boot-starter-web pulls in web-related dependencies.
+
+Profile Specific Files:
+Profile-specific properties are loaded from the same locations as standard application.properties, 
+with profile-specific files always overriding the non-specific ones. If several profiles are specified, a last-wins strategy applies. 
+For example, if profiles prod,live are specified by the spring.profiles.active property, values in application-prod.properties can be 
+overridden by those in application-live.properties.
+
+Importing Additional Data:
+Application properties may import further config data from other locations using the spring.config.import property. Imports are processed as they are discovered, and are treated as additional documents inserted immediately below the one that declares the import.
+
+For example, you might have the following in your classpath application.properties file:
+
+PropertiesYaml
+spring.application.name=myapp
+spring.config.import=optional:file:./dev.properties
+
+
+
+spring-boot-starter-parent?
+Parent pom providing dependency and plugin management for applications built with Maven
+
+spring-boot-starter-web?
+Starter for building web, including RESTful, applications using Spring MVC. Uses Tomcat as the default embedded container
+
+
+
+
+
+Why Servlets are not thread Safe?
+That said, your major concern is possibly thread safety. You should now know that servlets and filters are shared among all requests. That's the nice thing about Java, it's multithreaded and different threads (read: HTTP requests) can make use of the same instance. It would otherwise be too expensive to recreate, init() and destroy() them for every single request.
+
+You should also realize that you should never assign any request or session scoped data as an instance variable of a servlet or filter. It will be shared among all other requests in other sessions. That's not thread-safe! The below example illustrates this:
+
+public class ExampleServlet extends HttpServlet {
+
+    private Object thisIsNOTThreadSafe;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Object thisIsThreadSafe;
+
+        thisIsNOTThreadSafe = request.getParameter("foo"); // BAD!! Shared among all requests!
+        thisIsThreadSafe = request.getParameter("foo"); // OK, this is thread safe.
+    } 
+}
+
+
+Spring @Transactional - isolation, propagation?
+
+
+PROPAGATION_REQUIRED = 0; If DataSourceTransactionObject T1 is already started for Method M1. If for another Method M2 Transaction object is required, no new Transaction object is created. Same object T1 is used for M2.
+
+PROPAGATION_MANDATORY = 2; method must run within a transaction. If no existing transaction is in progress, an exception will be thrown.
+
+PROPAGATION_REQUIRES_NEW = 3; If DataSourceTransactionObject T1 is already started for Method M1 and it is in progress (executing method M1). If another method M2 start executing then T1 is suspended for the duration of method M2 with new DataSourceTransactionObject T2 for M2. M2 run within its own transaction context.
+
+PROPAGATION_NOT_SUPPORTED = 4; If DataSourceTransactionObject T1 is already started for Method M1. If another method M2 is run concurrently. Then M2 should not run within transaction context. T1 is suspended till M2 is finished.
+
+PROPAGATION_NEVER = 5; None of the methods run in transaction context.
+
+An isolation level: It is about how much a transaction may be impacted by the activities of other concurrent transactions. It a supports consistency leaving the data across many tables in a consistent state. It involves locking rows and/or tables in a database.
+
+The problem with multiple transaction
+
+Scenario 1. If T1 transaction reads data from table A1 that was written by another concurrent transaction T2. If on the way T2 is rollback, the data obtained by T1 is invalid one. E.g. a=2 is original data. If T1 read a=1 that was written by T2. If T2 rollback then a=1 will be rollback to a=2 in DB. But, now, T1 has a=1 but in DB table it is changed to a=2.
+
+Scenario2. If T1 transaction reads data from table A1. If another concurrent transaction (T2) update data on table A1. Then the data that T1 has read is different from table A1. Because T2 has updated the data on table A1. E.g. if T1 read a=1 and T2 updated a=2. Then a!=b.
+
+Scenario 3. If T1 transaction reads data from table A1 with certain number of rows. If another concurrent transaction (T2) inserts more rows on table A1. The number of rows read by T1 is different from rows on table A1.
+
+Scenario 1 is called Dirty reads.
+
+Scenario 2 is called Non-repeatable reads.
+
+Scenario 3 is called Phantom reads.
+
+So, isolation level is the extend to which Scenario 1, Scenario 2, Scenario 3 can be prevented. You can obtain complete isolation level by implementing locking. That is preventing concurrent reads and writes to the same data from occurring. But it affects performance. The level of isolation depends upon application to application how much isolation is required.
+
+ISOLATION_READ_UNCOMMITTED: Allows to read changes that haven’t yet been committed. It suffer from Scenario 1, Scenario 2, Scenario 3.
+
+ISOLATION_READ_COMMITTED: Allows reads from concurrent transactions that have been committed. It may suffer from Scenario 2 and Scenario 3. Because other transactions may be updating the data.
+
+ISOLATION_REPEATABLE_READ: Multiple reads of the same field will yield the same results untill it is changed by itself. It may suffer from Scenario 3. Because other transactions may be inserting the data.
+
+ISOLATION_SERIALIZABLE: Scenario 1, Scenario 2, Scenario 3 never happen. It is complete isolation. It involves full locking. It affects performace because of locking.
+
+You can test using:
+
+public class TransactionBehaviour {
+   // set is either using xml Or annotation
+    DataSourceTransactionManager manager=new DataSourceTransactionManager();
+    SimpleTransactionStatus status=new SimpleTransactionStatus();
+   ;
+  
+    
+    public void beginTransaction()
+    {
+        DefaultTransactionDefinition Def = new DefaultTransactionDefinition();
+        // overwrite default PROPAGATION_REQUIRED and ISOLATION_DEFAULT
+        // set is either using xml Or annotation
+        manager.setPropagationBehavior(XX);
+        manager.setIsolationLevelName(XX);
+       
+        status = manager.getTransaction(Def);
+    
+    }
+
+    public void commitTransaction()
+    {
+       
+      
+            if(status.isCompleted()){
+                manager.commit(status);
+        } 
+    }
+
+    public void rollbackTransaction()
+    {
+       
+            if(!status.isCompleted()){
+                manager.rollback(status);
+        }
+    }
+    Main method{
+        beginTransaction()
+        M1();
+        If error(){
+            rollbackTransaction()
+        }
+         commitTransaction();
+    }
+   
+}
+You can debug and see the result with different values for isolation and propagation
+
+
+ Global transactions:
+ Global transactions enable you to work with multiple transactional resources, typically relational databases and message queues. 
+ The application server manages global transactions through the JTA, which is a cumbersome API to use (partly due to its exception model). 
+ Furthermore, a JTA UserTransaction normally needs to be sourced from JNDI, meaning that you also need to use JNDI in order to use JTA. 
+ Obviously the use of global transactions would limit any potential reuse of application code, as JTA is normally only available in an application server environment.
+ 
+Local transactions:
+Local transactions are resource-specific, such as a transaction associated with a JDBC connection. 
+Local transactions may be easier to use, but have significant disadvantages: they cannot work across multiple transactional resources. 
+For example, code that manages transactions using a JDBC connection cannot run within a global JTA transaction. 
+Because the application server is not involved in transaction management, it cannot help ensure correctness across multiple resources. 
+(It is worth noting that most applications use a single transaction resource.) Another downside is that local transactions are invasive to the programming model.
+
+
+If you use JTA in a Java EE container then you use a container DataSource, obtained through JNDI, in conjunction with Spring’s JtaTransactionManager. This is what the JTA and JNDI lookup version would look like:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/jee
+        http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+    <jee:jndi-lookup id="dataSource" jndi-name="jdbc/jpetstore"/>
+
+    <bean id="txManager" class="org.springframework.transaction.jta.JtaTransactionManager" />
+
+    <!-- other <bean/> definitions here -->
+
+</beans>
+The JtaTransactionManager does not need to know about the DataSource, or any other specific resources, because it uses the container’s global transaction management infrastructure.
+
+
+You can also use Hibernate local transactions easily, as shown in the following examples. In this case, you need to define a Hibernate LocalSessionFactoryBean, which your application code will use to obtain Hibernate Session instances.
+
+The DataSource bean definition will be similar to the local JDBC example shown previously and thus is not shown in the following example.
+
+[Note]
+If the DataSource, used by any non-JTA transaction manager, is looked up via JNDI and managed by a Java EE container, then it should be non-transactional because the Spring Framework, rather than the Java EE container, will manage the transactions.
+
+The txManager bean in this case is of the HibernateTransactionManager type. In the same way as the DataSourceTransactionManager needs a reference to the DataSource, the HibernateTransactionManager needs a reference to the SessionFactory.
+
+<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="mappingResources">
+        <list>
+            <value>org/springframework/samples/petclinic/hibernate/petclinic.hbm.xml</value>
+        </list>
+    </property>
+    <property name="hibernateProperties">
+        <value>
+            hibernate.dialect=${hibernate.dialect}
+        </value>
+    </property>
+</bean>
+
+<bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+If you are using Hibernate and Java EE container-managed JTA transactions, then you should simply use the same JtaTransactionManager as in the previous JTA example for JDBC.
+
+<bean id="txManager" class="org.springframework.transaction.jta.JtaTransactionManager"/>
+[Note]
+If you use JTA , then your transaction manager definition will look the same regardless of what data access technology you use, be it JDBC, Hibernate JPA or any other supported technology. This is due to the fact that JTA transactions are global transactions, which can enlist any transactional resource.
+
+It is not sufficient to tell you simply to annotate your classes with the @Transactional annotation, add @EnableTransactionManagement to your configuration, and then expect you to understand how it all works. This section explains the inner workings of the Spring Framework’s declarative transaction infrastructure in the event of transaction-related issues.
+
+The most important concepts to grasp with regard to the Spring Framework’s declarative transaction support are that this support is enabled via AOP proxies, and that the transactional advice is driven by metadata (currently XML- or annotation-based). The combination of AOP with transactional metadata yields an AOP proxy that uses a TransactionInterceptor in conjunction with an appropriate PlatformTransactionManager implementation to drive transactions around method invocations.
+
+Method visibility and @Transactional
+
+When using proxies, you should apply the @Transactional annotation only to methods with public visibility. If you do annotate protected, private or package-visible methods with the @Transactional annotation, no error is raised, but the annotated method does not exhibit the configured transactional settings. Consider the use of AspectJ (see below) if you need to annotate non-public methods.
+
+@EnableTransactionManagement and <tx:annotation-driven/> only looks for @Transactional on beans in the same application context they are defined in. This means that, if you put annotation driven configuration in a WebApplicationContext for a DispatcherServlet, it only checks for @Transactional beans in your controllers, and not your services. See Section 21.2, “The DispatcherServlet” for more information.
+
+Multiple Transaction Managers with @Transactional
+Most Spring applications only need a single transaction manager, but there may be situations where you want multiple independent transaction managers in a single application. The value attribute of the @Transactional annotation can be used to optionally specify the identity of the PlatformTransactionManager to be used. This can either be the bean name or the qualifier value of the transaction manager bean. For example, using the qualifier notation, the following Java code
+
+public class TransactionalService {
+
+    @Transactional("order")
+    public void setSomething(String name) { ... }
+
+    @Transactional("account")
+    public void doSomething() { ... }
+}
+could be combined with the following transaction manager bean declarations in the application context.
+
+<tx:annotation-driven/>
+
+    <bean id="transactionManager1" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        ...
+        <qualifier value="order"/>
+    </bean>
+
+    <bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        ...
+        <qualifier value="account"/>
+    </bean>
+In this case, the two methods on TransactionalService will run under separate transaction managers, differentiated by the "order" and "account" qualifiers. The default <tx:annotation-driven> target bean name transactionManager will still be used if no specifically qualified PlatformTransactionManager bean is found.
+
+
+
+Q : Save Hibernate entity with parend child relationships fails with foreign key error?
+https://stackoverflow.com/questions/25516980/save-hibernate-entity-with-parend-child-relationships-fails-with-foreign-key-err
+Ans: Use CaseCase at Child
+
+
+Q: How to avoid LazyInitializationException in Hibernate/Spring Data JPA? 
+Ans: 
+https://stackoverflow.com/questions/578433/how-to-solve-the-lazyinitializationexception-when-using-jpa-and-hibernate
+#To Avoid Lazy Load Exception need to set this property
+spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true

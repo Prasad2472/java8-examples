@@ -1,0 +1,76 @@
+
+->In Which cases Auto box and unbox will fail?
+
+Java Programming Language:
+Lambda Expressions, a new language feature, has been introduced in this release. They enable you to treat functionality as a method argument, or code as data. Lambda expressions let you express instances of single-method interfaces (referred to as functional interfaces) more compactly.
+Method references provide easy-to-read lambda expressions for methods that already have a name.
+Default methods enable new functionality to be added to the interfaces of libraries and ensure binary compatibility with code written for older versions of those interfaces.
+Repeating Annotations provide the ability to apply the same annotation type more than once to the same declaration or type use.
+Type Annotations provide the ability to apply an annotation anywhere a type is used, not just on a declaration. Used with a pluggable type system, this feature enables improved type checking of your code.
+Improved type inference.
+Method parameter reflection.
+
+Collections:
+Classes in the new java.util.stream package provide a Stream API to support functional-style operations on streams of elements. The Stream API is integrated into the Collections API, which enables bulk operations on collections, such as sequential or parallel map-reduce transformations.
+Performance Improvement for HashMaps with Key Collisions
+
+Performance improvement for the java.lang.String(byte[], *) constructor and the java.lang.String.getBytes() method.
+
+java.lang and java.util Packages:
+Parallel Array Sorting
+Standard Encoding and Decoding Base64
+Unsigned Arithmetic Support
+
+JDBC:
+The JDBC-ODBC Bridge has been removed.
+JDBC 4.2 introduces new features.
+
+Java DB:
+JDK 8 includes Java DB 10.10.
+
+Networking:
+The class java.net.URLPermission has been added.
+In the class java.net.HttpURLConnection, if a security manager is installed, calls that request to open a connection require permission.
+Concurrency:
+Classes and interfaces have been added to the java.util.concurrent package.
+Methods have been added to the java.util.concurrent.ConcurrentHashMap class to support aggregate operations based on the newly added streams facility and lambda expressions.
+Classes have been added to the java.util.concurrent.atomic package to support scalable updatable variables.
+Methods have been added to the java.util.concurrent.ForkJoinPool class to support a common pool.
+The java.util.concurrent.locks.StampedLock class has been added to provide a capability-based lock with three modes for controlling read/write access.
+
+
+
+
+
+
+Why Functional Interfaces in Java 8 have one Abstract Method?
+If Java would have allowed having two abstract methods, then lambda expression would be required to provide an implementation of both the methods. Because, calling method won't know, which method to call out of those 2 abstract methods. It could have called the one which is not implemented. For example
+
+If Java would have allowed this kind of functional interface
+
+@FunctionalInterface
+interface MyInterface {
+    void display();
+    void display(int x, int y);
+}
+Then on implementing the following would have not been possible.
+
+public class LambdaExpression {
+    public static void main(String[] args) {
+        MyInterface ref = () -> System.out.print("It is display from sout");
+        ref.display(2, 3);
+
+    }
+}
+From java DOC:
+An informative annotation type used to indicate that an interface type declaration is intended to be a functional interface as defined by the Java Language Specification. Conceptually, a functional interface has exactly one abstract method. Since default methods have an implementation, they are not abstract. If an interface declares an abstract method overriding one of the public methods of java.lang.Object, that also does not count toward the interface's abstract method count since any implementation of the interface will have an implementation from java.lang.Object or elsewhere. 
+
+Note that instances of functional interfaces can be created with lambda expressions, method references, or constructor references. 
+
+If a type is annotated with this annotation type, compilers are required to generate an error message unless: 
+• The type is an interface type and not an annotation type, enum, or class. 
+• The annotated type satisfies the requirements of a functional interface. 
+
+However, the compiler will treat any interface meeting the definition of a functional interface as a functional interface regardless of whether or not a FunctionalInterface annotation is present on the interface declaration.
+
+

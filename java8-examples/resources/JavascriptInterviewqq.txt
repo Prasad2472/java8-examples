@@ -1,0 +1,91 @@
+Difference between window.location and location.href
+https://stackoverflow.com/questions/9903659/difference-between-window-location-and-location-href
+Ans: 
+window.location is an object that holds all the information about the current document location (host, href, port, protocol etc.).
+
+location.href is shorthand for window.location.href (you call location from global object - window, so this is window.location.href), and this is only a string with the full URL of the current website.
+
+They act the same when you assign a URL to them - they will redirect to the page which you assign, but you can see differences between them when you open the browser console (firebug or developer tools) and write window.location and location.href.
+
+Q:Difference between window.location.href and top.location.href
+
+window.location.href returns the location of the current page.
+
+top.location.href (which is an alias of window.top.location.href) returns the location of the topmost window in the window hierarchy. If a window has no parent, top is a reference to itself (in other words, window === window.top).
+
+top is useful both when you're dealing with frames and when dealing with windows which have been opened by other pages. For example, if you have a page called test.html with the following script:
+
+var newWin=window.open('about:blank','test','width=100,height=100');
+newWin.document.write('<script>alert(top.location.href);</script>');
+The resulting alert will have the full path to test.html – not about:blank, which is what window.location.href would return.
+
+To answer your question about redirecting, go with window.location.assign(url);
+
+Q: How to test if a string is JSON or not?
+Ans:
+Use JSON.parse
+
+function isJson(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+
+ReactJs:
+==================================
+https://stackoverflow.com/questions/38558200/react-setstate-not-updating-immediately
+You should invoke your second function as a callback to setState, as setState happens asynchronously. Something like:
+
+this.setState({pencil:!this.state.pencil}, myFunction)
+However in your case since you want that function called with a parameter you're going to have to get a bit more creative, and perhaps create your own function that calls the function in the props:
+
+myFunction = () => {
+  this.props.updateItem(this.state)
+}
+Combine those together and it should work.
+
+'setInterval' vs 'setTimeout' [duplicate]?
+https://stackoverflow.com/questions/2696692/setinterval-vs-settimeout
+setTimeout(expression, timeout); runs the code/function once after the timeout.
+
+setInterval(expression, timeout); runs the code/function in intervals, with the length of the timeout between them.
+
+Example:
+
+var intervalID = setInterval(alert, 1000); // Will alert every second.
+// clearInterval(intervalID); // Will clear the timer.
+
+setTimeout(alert, 1000); // Will alert once, after a second.
+
+setTimeout()
+Execute a specified block of code once after a specified time has elapsed.
+setInterval()
+Execute a specified block of code repeatedly with a fixed time delay between each call.
+
+
+Detecting Browser Autofill?
+https://stackoverflow.com/questions/11708092/detecting-browser-autofill
+
+
+Q:Change Input background to transparent on autocomplete form
+
+https://stackoverflow.com/questions/29580704/change-input-background-to-transparent-on-autocomplete-form
+Ans:
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #fff !important;
+}
+
+
+
+CSSS:
+======================
+
+z-index: -1; ->Allow overlap

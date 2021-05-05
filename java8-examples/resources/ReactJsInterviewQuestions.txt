@@ -1,0 +1,28 @@
+
+Q: React - How to get parameter value from query string?
+https://stackoverflow.com/questions/35352638/react-how-to-get-parameter-value-from-query-string
+
+Using component
+
+<Route path="/users/:id" component={UserPage}/> 
+this.props.match.params.id
+The component is automatically rendered with the route props.
+
+
+Using render
+
+<Route path="/users/:id" render={(props) => <UserPage {...props} />}/> 
+this.props.match.params.id
+Route props are passed to the render function
+
+---------------------------------------------------------------
+-Since React 16 functional component deosnt not have state, in react 16, useState hook introduced
+-Can we use settate in constructor?>
+-How can you prevent update in functional based component
+-Component vs PureComponent?
+-How react updates the DOM?
+
+Q: Suppose there are Components chain A->B->C->D
+I want to state from A -> D
+i dont want to pass it to B and C
+How will you do that?
