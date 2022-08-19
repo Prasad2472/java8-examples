@@ -1,0 +1,4 @@
+# ClassLoader Subsystem
+ 1. BootStrap ClassLoader -> rt.jar. Highest priority will be given to this loader.
+ 2. Extension ClassLoader -> Responsible for loading classes which are inside the ext folder (jre\lib).
+ 3. Application ClassLoader –> Responsible for loading Application Level Classpath, path mentioned Environment Variable, etc
