@@ -5,7 +5,9 @@ import java.util.Arrays;
 public class NextMaxNumber {
 
 	public static void main(String[] args) {
-
+		/**
+		** Optum
+		**/
 		System.out.println("Original=1234 Next Maximum=" + nextMaxNumber(1234));
 		System.out.println("Original=1243 Next Maximum=" + nextMaxNumber(1243));
 		System.out.println("Original=1342 Next Maximum=" + nextMaxNumber(1342));
