@@ -3,7 +3,7 @@ package com.core.test;
 public class SmallestPivote {
 
 	public static void main(String[] args) {
-		/**
+		/** Optum -- 
 		 * Given an array of numbers, find the index of the smallest array element (the
 		 * pivot), for which the sums of all elements to the left and to the right are
 		 * equal. The array may not be reordered. Example arr=[1,2,3,4,6]
