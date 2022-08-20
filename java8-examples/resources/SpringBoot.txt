@@ -1,1 +1,3 @@
-
+# WebClient vs RestTemplate
+- RestTemplate: Synchronous client to perform HTTP requests, exposing a simple, templatemethod API over underlying HTTP client libraries such as the JDK HttpURLConnection, Apache HttpComponents, and others.
+- WebClient :  Non-blocking, reactive client to perform HTTP requests, exposing a fluent,reactive API over underlying HTTP client libraries such as Reactor Netty. 
