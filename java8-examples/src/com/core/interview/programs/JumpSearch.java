@@ -24,6 +24,9 @@ public class JumpSearch {
 		System.out.println("JumpSearch :" + jumpSearch(arr, x));
 		System.out.println("JumpSearch :" + jumpSearch(arr, 616));
 		System.out.println("JumpSearch :" + jumpSearch(arr, 21));
+		System.out.println("JumpSearch :" + jumpSearch(arr, 610));
+		System.out.println("JumpSearch :" + jumpSearch(arr, 1));
+		System.out.println("JumpSearch :" + jumpSearch(arr, 1000));
 
 	}
 
@@ -33,14 +36,15 @@ public class JumpSearch {
 		int jump = (int) Math.floor(Math.sqrt(size));
 		int lastJump = 0;
 		int idx = 0;
-		while (idx < size && arr[idx] < element) {
+		while (idx < size && arr[idx] <= element) {
 			lastJump = idx;
 			idx += jump;
+			
 		}
-		while (idx < size && idx > lastJump) {
-			if (arr[idx] == element)
-				return idx;
-			idx--;
+		idx = Math.min(idx, size);
+		for (int i = lastJump; i < idx; i++) {
+			if (arr[i] == element)
+				return i;
 		}
 
 		return -1;
