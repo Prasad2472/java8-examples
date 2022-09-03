@@ -39,9 +39,7 @@ public class JumpSearch {
 		while (idx < size && arr[idx] <= element) {
 			lastJump = idx;
 			idx += jump;
-			
 		}
-		idx = Math.min(idx, size);
 		for (int i = lastJump; i < idx; i++) {
 			if (arr[i] == element)
 				return i;
