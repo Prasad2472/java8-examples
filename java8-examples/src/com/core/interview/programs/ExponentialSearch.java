@@ -7,6 +7,8 @@ public class ExponentialSearch {
 		int arr[] = { 2, 3, 4, 10, 40 };
 		int x = 40;
 		System.out.println("Exponnential:" + exponentialSearch(arr, x));
+		 x = 5;
+		System.out.println("Exponnential:" + exponentialSearch(arr, x));
 
 	}
 
@@ -17,21 +19,16 @@ public class ExponentialSearch {
 			return 0;
 		if (arr[n - 1] == key)
 			return n - 1;
-		while (idx < arr.length && arr[idx] <= key)
+		while (idx < arr.length - 2 && arr[idx] <= key)
 			idx = idx * 2;
 
 		// BianarySearch
-		return binarySearh(arr, idx / 2, Math.min(idx, n - 1), key);
+		return binarySearh(arr, idx / 2, Math.min(idx, n - 2), key);
 	}
 
 	private static int binarySearh(int[] arr, int start, int end, int key) {
 
 		if (start <= end) {
-			if (key == arr[start])
-				return start;
-			if (key == arr[end])
-				return end;
-
 			int mid = start + (end - start) / 2;
 			if (arr[mid] == key)
 				return mid;
